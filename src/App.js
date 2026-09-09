@@ -1,9 +1,10 @@
 import { BrowserRouter } from 'react-router-dom';
+import LoginPage from './components/LoginPage';
 
 function App() {
   return (
     <BrowserRouter>
-      <h1>Welcome to TikTok Shop!</h1>
+      <LoginPage />
     </BrowserRouter>
   );
 }
