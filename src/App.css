@@ -311,3 +311,94 @@
   .login-shell { animation: none; }
   .social-button, .submit-button { transition: none; }
 }
+
+.dashboard-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 28px clamp(24px, 6vw, 90px);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dashboard-logout {
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dashboard-content {
+  max-width: 900px;
+  margin: 86px auto 0;
+}
+
+.dashboard-content h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(42px, 7vw, 78px);
+  letter-spacing: -3px;
+  line-height: 1;
+}
+
+.dashboard-email {
+  margin: 18px 0 48px;
+  color: var(--muted);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-card {
+  min-height: 180px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 25px;
+  border-radius: 6px;
+  color: #111113;
+}
+
+.dashboard-card-pink { background: var(--pink); }
+.dashboard-card-cyan { background: var(--cyan); }
+
+.dashboard-card-label {
+  margin-bottom: auto;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dashboard-card strong {
+  font-size: 43px;
+  letter-spacing: -2px;
+}
+
+.dashboard-card small {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .dashboard-page { padding: 22px 18px; }
+  .dashboard-content { margin-top: 56px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+}

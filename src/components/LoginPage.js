@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 
-function LoginPage() {
+function LoginPage({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -14,11 +14,17 @@ function LoginPage() {
       return;
     }
 
-    if (email === 'user@example.com' && password === 'password') {
-      setMessage('Login successful. Welcome back.');
-    } else {
-      setMessage('That email and password combination is not valid.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setMessage('Enter a valid email address.');
+      return;
     }
+
+    if (password.length < 6) {
+      setMessage('Your password must be at least 6 characters.');
+      return;
+    }
+
+    onLogin(email);
   };
 
   return (
