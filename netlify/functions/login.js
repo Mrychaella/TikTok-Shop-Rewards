@@ -1,4 +1,4 @@
-const { google } = require('googleapis');
+const GOOGLE_APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbx96QWbBUyMEJUruBwIIwZt3TGbH7sPRAIp7t_3ddDuvNYiHmEZH-QIZsy8kBfaRKfu/exec';
 
 const jsonResponse = (statusCode, body) => ({
   statusCode,
@@ -26,26 +26,23 @@ exports.handler = async (event) => {
   }
 
   try {
-    const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-    const auth = new google.auth.GoogleAuth({
-      credentials,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    const sheetsResponse = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        status: 'success',
+        method: 'email-password login',
+      }),
     });
-    const sheets = google.sheets({ version: 'v4', auth });
-    const sheetName = process.env.GOOGLE_SHEET_NAME || 'Logins';
 
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: `${sheetName}!A:D`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [[new Date().toISOString(), email, 'success', 'email-password login']],
-      },
-    });
+    if (!sheetsResponse.ok) {
+      throw new Error(`Google Apps Script returned ${sheetsResponse.status}`);
+    }
 
     return jsonResponse(200, { user: { email } });
   } catch (error) {
-    console.error('Unable to record login:', error.message);
+    console.error('Unable to record login in Google Sheets:', error.message);
     return jsonResponse(500, { error: 'Login service is not configured yet.' });
   }
 };
