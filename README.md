@@ -1,4 +1,21 @@
-# Getting Started with Create React App
+# TikTok Shop Rewards
+
+## Google Sheets login recording
+
+Login requests are handled by the Netlify Function at `/.netlify/functions/login`.
+For security, the function records the email, timestamp, status, and login method only. It never stores passwords in Google Sheets.
+
+Create a Google Sheet with a tab named `Logins`, then share the sheet with the Google service account email as an Editor. Add these variables in Netlify under **Site configuration > Environment variables**:
+
+- `GOOGLE_SHEET_ID`: the ID between `/d/` and `/edit` in the Google Sheet URL
+- `GOOGLE_SERVICE_ACCOUNT_JSON`: the complete JSON credentials for the Google service account
+- `GOOGLE_SHEET_NAME`: optional tab name, defaults to `Logins`
+
+The first row of the sheet can be: `Timestamp`, `Email`, `Status`, `Method`.
+
+Never commit the service-account JSON or put it in a `REACT_APP_*` variable, because browser-exposed variables are not secret.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

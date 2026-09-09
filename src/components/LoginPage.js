@@ -6,8 +6,9 @@ function LoginPage({ onLogin }) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!email || !password) {
       setMessage('Enter your email and password to continue.');
@@ -24,7 +25,28 @@ function LoginPage({ onLogin }) {
       return;
     }
 
-    onLogin(email);
+    setIsSubmitting(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('/.netlify/functions/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        setMessage(result.error || 'Unable to log in.');
+        return;
+      }
+
+      onLogin(result.user.email);
+    } catch {
+      setMessage('Unable to reach the login service. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,7 +114,9 @@ function LoginPage({ onLogin }) {
           </div>
 
           <a className="forgot-link" href="#forgot-password">Forgot password?</a>
-          <button type="submit" className="submit-button">Log in</button>
+          <button type="submit" className="submit-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Log in'}
+          </button>
         </form>
 
         {message && <p className="login-message" role="status">{message}</p>}

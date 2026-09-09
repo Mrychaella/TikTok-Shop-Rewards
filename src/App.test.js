@@ -3,9 +3,13 @@ import App from './App';
 
 beforeEach(() => {
   localStorage.clear();
+  global.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({ user: { email: 'creator@example.com' } }),
+  });
 });
 
-test('logs in with valid credentials and opens the dashboard', () => {
+test('logs in with valid credentials and opens the dashboard', async () => {
   render(<App />);
 
   fireEvent.change(screen.getByLabelText(/email or username/i), {
@@ -16,7 +20,6 @@ test('logs in with valid credentials and opens the dashboard', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
-  expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
-  expect(screen.getByText(/creator@example.com/i)).toBeInTheDocument();
+  expect(await screen.findByText(/signed in as creator@example.com/i)).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /log out/i })).toBeInTheDocument();
 });
